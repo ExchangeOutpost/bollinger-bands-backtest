@@ -32,6 +32,13 @@
                 "minimum": 0.001,
                 "maximum": 1.0,
                 "default": 0.04
+            },
+            "usd_balance": {
+                "type": ["number","string"],
+                "description": "Amount in USD to allocate per trade (e.g., 1000.0)",
+                "minimum": 1.0,
+                "maximum": 1000000.0,
+                "default": 1000.0
             }
         },
         "required": ["period", "multiplier", "sl", "tp"],

@@ -45,6 +45,7 @@ struct BacktestResult {
 /// - multiplier: Standard deviation multiplier for bands
 /// - sl: Stop loss percentage (e.g., 0.02 = 2%)
 /// - tp: Take profit percentage (e.g., 0.04 = 4%)
+/// - usd_balance: Amount in USD to allocate per trade
 #[plugin_fn]
 pub fn run(fin_data: FinData) -> FnResult<BacktestResult> {
     let ticker = fin_data.get_ticker("symbol_data")?;
@@ -52,6 +53,7 @@ pub fn run(fin_data: FinData) -> FnResult<BacktestResult> {
     let multiplier: f64 = fin_data.get_call_argument("multiplier")?;
     let sl: f64 = fin_data.get_call_argument("sl")?;
     let tp: f64 = fin_data.get_call_argument("tp")?;
+    let usd_balance: f64 = fin_data.get_call_argument("usd_balance")?;
 
     // Validate input parameters
     if ticker.candles.len() < bb_period {
@@ -115,14 +117,14 @@ pub fn run(fin_data: FinData) -> FnResult<BacktestResult> {
                     // Open a short trade
                     open_trade = Some(OpenTrade {
                         open_price: candle.close,
-                        amount: 1 as f64,
+                        amount: usd_balance / candle.close,
                         side: Side::SHORT,
                     });
                 } else if candle.close < v.lower {
                     // Open a long trade
                     open_trade = Some(OpenTrade {
                         open_price: candle.close,
-                        amount: 1 as f64,
+                        amount: usd_balance / candle.close,
                         side: Side::LONG,
                     });
                 }
