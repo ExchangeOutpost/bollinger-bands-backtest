@@ -67,8 +67,7 @@ pub fn run(fin_data: FinData) -> FnResult<BacktestResult> {
     let mut trades: Vec<ClosedTrade> = vec![];
     let mut open_trade: Option<OpenTrade> = None;
 
-    let mut bb =
-        BollingerBands::new(bb_period, multiplier).expect("Failed to create Bollinger Bands");
+    let mut bb = BollingerBands::new(bb_period, multiplier).expect("Failed to create Bollinger Bands");
 
     // Initialize the Bollinger Bands with the first bb_period candles
     let mut candles_iter = ticker.candles.iter();
@@ -90,19 +89,11 @@ pub fn run(fin_data: FinData) -> FnResult<BacktestResult> {
                     Side::LONG => trade.open_price * (1.0 + tp),
                     Side::SHORT => trade.open_price * (1.0 - tp),
                 };
-                if (trade.side == Side::LONG && candle.close < sl_price)
-                    || (trade.side == Side::SHORT && candle.close > sl_price)
-                {
-                    trades.push(ClosedTrade {
-                        open_price: trade.open_price,
-                        close_price: candle.close,
-                        amount: trade.amount,
-                        side: trade.side,
-                    });
-                    open_trade = None;
-                } else if (trade.side == Side::LONG && candle.close > tp_price)
-                    || (trade.side == Side::SHORT && candle.close < tp_price)
-                {
+
+                let should_close_long = trade.side == Side::LONG && (candle.close < sl_price || candle.close > tp_price);
+                let should_close_short = trade.side == Side::SHORT && (candle.close > sl_price || candle.close < tp_price);
+
+                if should_close_long || should_close_short {
                     trades.push(ClosedTrade {
                         open_price: trade.open_price,
                         close_price: candle.close,
