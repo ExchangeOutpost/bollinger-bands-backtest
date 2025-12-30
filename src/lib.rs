@@ -126,7 +126,7 @@ pub fn run(call_args: FunctionArgs) -> FnResult<BacktestResult> {
     if let Some(trade) = open_trade {
         trades.push(ClosedTrade {
             open_price: trade.open_price,
-            close_price: ticker.candles.last().expect("No candles").close,
+            close_price: ticker.candles.last().expect("No candles provided").close,
             amount: trade.amount,
             side: trade.side,
         });
