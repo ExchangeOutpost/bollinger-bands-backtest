@@ -2,11 +2,7 @@ name: Build
 
 on:
   push:
-    branches:
-      - master
   pull_request:
-    branches:
-      - master
 
 env:
   # Disable incremental compilation for faster from-scratch builds
@@ -26,7 +22,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: target/wasm32-unknown-unknown/release/rust_function_template.wasm
         asset_name: finfunc.wasm
-        tag: ${{ github.ref }}
+        tag: b-${{ github.ref_name }}
         overwrite: true
         body: "Finfunc release for testing"
         prerelease: true
@@ -37,7 +33,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./manifest.json
         asset_name: manifest.json
-        tag: ${{ github.ref }}
+        tag: b-${{ github.ref_name }}
         overwrite: true
         body: "Finfunc release for testing"
         prerelease: true
