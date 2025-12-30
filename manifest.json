@@ -1,6 +1,6 @@
 {
     "function_name": "Bollinger Bands Backtest",
-    "description": "A mean reversion trading strategy backtest using Bollinger Bands. Buys when price touches lower band (oversold) and sells when price touches upper band (overbought).",
+    "description": "A mean reversion trading strategy backtest using Bollinger Bands. Buys when price touches lower band and sells when price touches upper band.",
     "financial_data_keys": ["symbol_data"],
     "call_arguments_schema": {
         "type": "object",
